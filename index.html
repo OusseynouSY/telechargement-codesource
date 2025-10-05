@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Téléchargements - Ma chaîne YouTube</title>
+  <meta name="description" content="Page simple et stylée pour télécharger les codes sources des projets de la chaîne YouTube." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#7c3aed; --muted:#9aa4b2; --glass: rgba(255,255,255,0.04);
+      --radius:14px; --maxw:1060px;
+      --shadow: 0 10px 30px rgba(2,6,23,0.6);
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; margin:0;background:linear-gradient(180deg,var(--bg),#081025);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+    .container{width:100%;max-width:var(--maxw)}
+    header{display:flex;align-items:center;gap:18px;margin-bottom:28px}
+    .logo{width:62px;height:62px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4f46e5);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;box-shadow:var(--shadow)}
+    h1{margin:0;font-size:28px}
+    p.lead{margin:6px 0 0;color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:22px}
+    main{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    aside{padding:18px;background:var(--card);border-radius:12px;min-height:220px}
+
+    .search{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+    .search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:13px;color:var(--muted);cursor:pointer}
+
+    .cards{display:grid;gap:12px}
+    .card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);border:1px solid rgba(255,255,255,0.02)}
+    .meta{display:flex;gap:12px;align-items:center}
+    .thumb{width:72px;height:56px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#0ea5a0,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .title{font-weight:600}
+    .desc{font-size:13px;color:var(--muted)}
+
+    .actions{display:flex;gap:8px}
+    .btn{padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.03);cursor:pointer;font-weight:600}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#4f46e5);border:none;color:white}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+
+    footer{margin-top:16px;color:var(--muted);font-size:13px}
+
+    .aside-section{margin-bottom:12px}
+    .mini{font-size:13px;color:var(--muted)}
+    .yt-btn{display:inline-block;padding:10px 12px;border-radius:10px;background:#ff3b30;color:white;text-decoration:none;font-weight:700}
+
+    @media (max-width:920px){.grid{grid-template-columns:1fr}.aside{order:2}.container{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">YT</div>
+      <div>
+        <h1>Téléchargements — Ma chaîne YouTube</h1>
+        <p class="lead">Téléchargez facilement les codes sources des projets présentés dans les vidéos.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main>
+        <div class="search">
+          <input id="search" placeholder="Rechercher un projet, ex: ToDo, API, UI..." />
+          <div class="chips">
+            <div class="chip" data-filter="all">Tous</div>
+            <div class="chip" data-filter="web">Web</div>
+            <div class="chip" data-filter="mobile">Mobile</div>
+            <div class="chip" data-filter="backend">Backend</div>
+          </div>
+        </div>
+
+        <div id="cards" class="cards">
+          <!-- Les cartes de projets seront injectées par JS -->
+        </div>
+
+        <footer>
+          <div>Conseils d'hébergement : GitHub Pages, Netlify ou Vercel (gratuit et simple).</div>
+        </footer>
+      </main>
+
+      <aside>
+        <div class="aside-section">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>À propos</strong><span class="mini">v1.0</span></div>
+          <div class="mini">Cette page est pensée pour afficher vos projets et fournir un lien direct pour télécharger le code source (zip) ou aller sur GitHub.</div>
+        </div>
+
+        <div class="aside-section">
+          <strong>Abonnez-vous</strong>
+          <div style="margin-top:8px"><a class="yt-btn" href="#" id="ytChannel" target="_blank">Visiter la chaîne</a></div>
+        </div>
+
+        <div class="aside-section">
+          <strong>Uploader / Modifier</strong>
+          <div class="mini" style="margin-top:8px">Remplacez les liens dans le script en bas : la variable <code>projects</code> contient les projets affichés.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // --- CONFIGURATION (Remplacez ces données par vos vrais liens) ---
+    const ytChannelUrl = 'https://www.youtube.com/your-channel-url'; // remplacez
+    const projects = [
+      { id: 'todo-app', title: 'ToDo Flutter', tag: 'mobile', desc: 'Application ToDo expliquée dans la vidéo #12', thumbText: 'TF', zip: '#', github: '#', repo: 'https://github.com/votre-compte/todo-flutter.git' },
+      { id: 'landing', title: 'Landing Page HTML/CSS', tag: 'web', desc: 'Template landing page responsive', thumbText: 'LP', zip: '#', github: '#', repo: 'https://github.com/votre-compte/landing-template.git' },
+      { id: 'api-node', title: 'API Node.js', tag: 'backend', desc: 'API REST avec Express et JWT', thumbText: 'API', zip: '#', github: '#', repo: 'https://github.com/votre-compte/api-node.git' }
+    ];
+    // -----------------------------------------------------------------
+
+    document.getElementById('ytChannel').href = ytChannelUrl;
+
+    const cardsEl = document.getElementById('cards');
+    function buildCard(p){
+      const el = document.createElement('div'); el.className='card';
+      el.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="thumb">${p.thumbText}</div>
+          <div>
+            <div class="title">${p.title}</div>
+            <div class="desc">${p.desc}</div>
+            <div class="mini" style="margin-top:6px">Tag: ${p.tag}</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" data-zip="${p.zip}">Télécharger</button>
+          <a class="btn ghost" href="${p.github}" target="_blank">Voir GitHub</a>
+          <button class="btn" data-copy="${p.repo}">Copier repo</button>
+        </div>
+      `;
+      return el;
+    }
+
+    function render(list){
+      cardsEl.innerHTML='';
+      if(list.length===0){ cardsEl.innerHTML = '<div class="mini">Aucun projet trouvé.</div>'; return; }
+      list.forEach(p=>cardsEl.appendChild(buildCard(p)));
+      // wire buttons
+      document.querySelectorAll('[data-zip]').forEach(btn=>{
+        btn.addEventListener('click',e=>{
+          const url = e.currentTarget.dataset.zip;
+          if(!url || url==='#'){
+            alert('Lien de téléchargement introuvable. Remplacez la propriété "zip" du projet par l'URL du fichier .zip ou du dépôt.');
+            return;
+          }
+          // navigation — si c'est un vrai zip, le navigateur le téléchargera
+          window.open(url,'_blank');
+        });
+      });
+      document.querySelectorAll('[data-copy]').forEach(btn=>{
+        btn.addEventListener('click',e=>{
+          const txt = e.currentTarget.dataset.copy || '';
+          if(!txt){ alert('Aucun repo à copier'); return; }
+          navigator.clipboard?.writeText(txt).then(()=>{
+            alert('URL du repo copiée dans le presse-papiers');
+          }).catch(()=>{ prompt('Copiez manuellement :', txt); });
+        });
+      });
+    }
+
+    // initial render
+    render(projects);
+
+    // recherche simple
+    document.getElementById('search').addEventListener('input', e=>{
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = projects.filter(p => p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.tag.toLowerCase().includes(q));
+      render(filtered);
+    });
+
+    // chips
+    document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click', e=>{
+      const f = e.currentTarget.dataset.filter;
+      document.getElementById('search').value='';
+      if(f==='all') render(projects);
+      else render(projects.filter(p=>p.tag===f));
+    }));
+
+    // Petit conseil : si vous hébergez sur GitHub Pages, poussez le dossier build/static (ou le HTML seul) et activez Pages dans les settings.
+  </script>
+</body>
+</html>
