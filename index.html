@@ -196,7 +196,7 @@
       confirmDownload.textContent = "Enregistrement...";
 
       try {
-        await addDoc(collection(db, "emails"), { email, timestamp: new Date() });
+        await addDoc(collection(db, "emails"), { email: email, timestamp: new Date() });
         console.log("✅ Email enregistré sur Firebase !");
         confirmDownload.textContent = "Téléchargement en cours...";
         window.location.href = currentDownloadLink;
