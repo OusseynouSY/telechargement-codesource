@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Téléchargements - Ma chaîne YouTube</title>
-  <meta name="description" content="Page simple et stylée pour télécharger les codes sources des projets de la chaîne YouTube." />
+  <title>Téléchargements - Nouno TECH</title>
+  <meta name="description" content="Téléchargez les codes sources et projets de mes vidéos YouTube." />
   <style>
     :root{
       --bg:#0f1724; --card:#0b1220; --accent:#7c3aed; --muted:#9aa4b2; --glass: rgba(255,255,255,0.04);
@@ -19,113 +19,219 @@
     .logo{width:62px;height:62px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4f46e5);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;box-shadow:var(--shadow)}
     h1{margin:0;font-size:28px}
     p.lead{margin:6px 0 0;color:var(--muted)}
-
     .grid{display:grid;grid-template-columns:1fr 360px;gap:22px}
     main{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow)}
     aside{padding:18px;background:var(--card);border-radius:12px;min-height:220px}
-
-    .search{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+    .search{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
     .search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
     .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:13px;color:var(--muted);cursor:pointer}
-
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:13px;color:var(--muted);cursor:pointer;user-select:none;transition:0.2s}
+    .chip.active{background:var(--accent);color:white}
     .cards{display:grid;gap:12px}
     .card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);border:1px solid rgba(255,255,255,0.02)}
-    .meta{display:flex;gap:12px;align-items:center}
     .thumb{width:72px;height:56px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#0ea5a0,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700}
     .title{font-weight:600}
     .desc{font-size:13px;color:var(--muted)}
-
     .actions{display:flex;gap:8px}
-    .btn{padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.03);cursor:pointer;font-weight:600}
+    .btn{padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.03);cursor:pointer;font-weight:600;text-decoration:none;color:inherit}
     .btn.primary{background:linear-gradient(90deg,var(--accent),#4f46e5);border:none;color:white}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
-
-    footer{margin-top:16px;color:var(--muted);font-size:13px}
-
-    .aside-section{margin-bottom:12px}
-    .mini{font-size:13px;color:var(--muted)}
-    .yt-btn{display:inline-block;padding:10px 12px;border-radius:10px;background:#ff3b30;color:white;text-decoration:none;font-weight:700}
-
+    .logo img {width: 100%;height: 100%;border-radius: 12px;object-fit: cover;}
+    /* === Animations des boutons === */
+    .btn { position: relative; overflow: hidden; transition: all 0.3s ease; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4); }
+    .btn.primary::before { content: ""; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0)); transform: skewX(-25deg); transition: left 0.6s ease; }
+    .btn.primary:hover::before { left: 125%; }
+    .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn:active { transform: scale(0.97); box-shadow: none; }
+    footer{margin-top:16px;color:var(--muted);font-size:13px;text-align:center}
     @media (max-width:920px){.grid{grid-template-columns:1fr}.aside{order:2}.container{padding:12px}}
+    /* === Fenêtre modale === */
+    .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 1000;}
+    .modal-content {background: var(--card); color: var(--text); padding: 2rem; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.3); text-align: center;}
+    .modal-content input {width: 100%; padding: 0.7rem; margin-top: 1rem; border-radius: 8px; border: 1px solid #ccc;}
+    .modal-content button {margin-top: 1rem; width: 100%;}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <div class="logo">YT</div>
+      <div class="logo">
+        <img src="https://github.com/ousseynousy/telechargement-codesource/raw/main/logo.png" alt="Logo YouTube" />
+      </div>
       <div>
-        <h1>Téléchargements — Ma chaîne YouTube</h1>
-        <p class="lead">Téléchargez facilement les codes sources des projets présentés dans les vidéos.</p>
+        <h1>Téléchargements — Nouno TECH</h1>
+        <p class="lead">Téléchargez facilement les codes sources et projets présentés dans mes vidéos.</p>
       </div>
     </header>
 
     <div class="grid">
       <main>
         <div class="search">
-          <input id="search" placeholder="Rechercher un projet, ex: ToDo, API, UI..." />
+          <input id="search" placeholder="Rechercher un projet, ex: Flutter, API, Portfolio..." />
           <div class="chips">
-            <div class="chip" data-filter="all">Tous</div>
-            <div class="chip" data-filter="web">Web</div>
+            <div class="chip active" data-filter="all">Tous</div>
             <div class="chip" data-filter="mobile">Mobile</div>
+            <div class="chip" data-filter="web">Web</div>
             <div class="chip" data-filter="backend">Backend</div>
+            <div class="chip" data-filter="frontend">Frontend</div>
+            <div class="chip" data-filter="design">Design</div>
           </div>
         </div>
 
         <div id="cards" class="cards"></div>
 
         <footer>
-          <div>Conseils d'hébergement : GitHub Pages, Netlify ou Vercel (gratuit et simple).</div>
+          <div>© 2025 - NounoTECH | Hébergé sur GitHub Pages</div>
         </footer>
       </main>
 
       <aside>
-        <div class="aside-section">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>À propos</strong><span class="mini">v1.0</span></div>
-          <div class="mini">Cette page permet à vos abonnés de télécharger les projets présentés dans vos vidéos YouTube.</div>
-        </div>
-
-        <div class="aside-section">
-          <strong>Abonnez-vous</strong>
-          <div style="margin-top:8px"><a class="yt-btn" href="https://www.youtube.com/@NounoTECH" target="_blank">Visiter la chaîne</a></div>
+        <div><strong>Abonnez-vous à la chaîne YouTube</strong></div>
+        <div style="margin-top:8px">
+          <a class="btn primary" href="https://www.youtube.com/@NounoTECH" target="_blank">Visiter la chaîne</a>
         </div>
       </aside>
     </div>
   </div>
 
-  <script>
-    // --- CONFIGURATION ---
-    const ytChannelUrl = 'https://www.youtube.com/@NounoTECH';
-    const projects = [
-      {
-        id: 'todo-app',
-        title: 'To-Do List Flutter',
-        tag: 'mobile',
-        desc: 'Code source complet de l’application To-Do List présentée sur YouTube',
-        thumbText: 'TF',
-        zip: 'https://github.com/ousseynousy/telechargement-codesource/raw/main/To-Do-List_Code_Source.zip',
-        github: 'https://github.com/ousseynousy/telechargement-codesource',
-        repo: 'https://github.com/ousseynousy/telechargement-codesource.git'
-      }
-    ];
-    // -----------------------
+  <!-- Fenêtre modale -->
+  <div id="emailModal" class="modal">
+    <div class="modal-content">
+      <h3>💡 Avant de télécharger</h3>
+      <p>Entrez votre adresse e-mail pour être averti de mes prochaines vidéos 📩</p>
+      <input type="email" id="userEmail" placeholder="exemple@email.com" />
+      <button id="confirmDownload" class="btn primary">Continuer et télécharger</button>
+      <button id="closeModal" class="btn ghost">Annuler</button>
+    </div>
+  </div>
 
-    document.getElementById('cards').innerHTML = projects.map(p => `
-      <div class="card">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="thumb">${p.thumbText}</div>
-          <div>
-            <div class="title">${p.title}</div>
-            <div class="desc">${p.desc}</div>
-            <div class="mini" style="margin-top:6px">Tag: ${p.tag}</div>
+  <!-- 🚀 Firebase version avec animation de chargement -->
+  <script type="module">
+  // Import Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+  // === CONFIGURATION FIREBASE ===
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPY88atDw9MhnU9Q2GsGlJ7S2w-GGLERw",
+    authDomain: "telechargement-nounotech.firebaseapp.com",
+    projectId: "telechargement-nounotech",
+    storageBucket: "telechargement-nounotech.firebasestorage.app",
+    messagingSenderId: "90467191007",
+    appId: "1:90467191007:web:af3e0d6cead6578df7016a"
+  };
+
+  // Initialisation
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // === SCRIPT PRINCIPAL ===
+  const projects = [
+    {
+      title: "Bloc-notes Flutter",
+      tag: "mobile",
+      desc: "Code source complet de l'application Bloc-notes Flutter.",
+      thumbText: "BN",
+      zip: "https://github.com/ousseynousy/telechargement-codesource/raw/main/Bloc-Notes_Code_Source.zip",
+      github: "https://github.com/ousseynousy/telechargement-codesource"
+    },
+    {
+      title: "To-Do List Flutter",
+      tag: "mobile",
+      desc: "Code source complet de l’application To-Do List Flutter.",
+      thumbText: "TL",
+      zip: "https://github.com/ousseynousy/telechargement-codesource/raw/main/To-Do-List_Code_Source.zip",
+      github: "https://github.com/ousseynousy/telechargement-codesource"
+    }
+  ];
+
+  const cards = document.getElementById("cards");
+  const search = document.getElementById("search");
+  const chips = document.querySelectorAll(".chip");
+
+  let currentDownloadLink = "";
+
+  function renderProjects(filter = "all", query = "") {
+    cards.innerHTML = projects
+      .filter(p =>
+        (filter === "all" || p.tag === filter) &&
+        p.title.toLowerCase().includes(query.toLowerCase())
+      )
+      .map(p => `
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="thumb">${p.thumbText}</div>
+            <div>
+              <div class="title">${p.title}</div>
+              <div class="desc">${p.desc}</div>
+              <div class="mini" style="margin-top:6px">Catégorie: ${p.tag}</div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary download-btn" data-zip="${p.zip}">Télécharger</button>
+            <a class="btn ghost" href="${p.github}" target="_blank">GitHub</a>
           </div>
         </div>
-        <div class="actions">
-          <a class="btn primary" href="${p.zip}" download>Télécharger</a>
-          <a class="btn ghost" href="${p.github}" target="_blank">Voir GitHub</a>
-        </div>
-      </div>
-    `).join('');
-  </script>
+      `).join('');
+
+    // Ajoute le comportement des boutons
+    document.querySelectorAll(".download-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        currentDownloadLink = btn.getAttribute("data-zip");
+        modal.style.display = "flex";
+      });
+    });
+  }
+
+  renderProjects();
+
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      chips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      renderProjects(chip.dataset.filter, search.value);
+    });
+  });
+
+  search.addEventListener("input", () => {
+    const activeFilter = document.querySelector(".chip.active").dataset.filter;
+    renderProjects(activeFilter, search.value);
+  });
+
+  // === MODALE EMAIL ===
+  const modal = document.getElementById("emailModal");
+  const closeModal = document.getElementById("closeModal");
+  const confirmDownload = document.getElementById("confirmDownload");
+  const emailInput = document.getElementById("userEmail");
+
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  confirmDownload.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    if (!email || !email.includes("@")) {
+      alert("Merci de saisir une adresse e-mail valide.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "emails"), {
+        email: email,
+        timestamp: new Date()
+      });
+      console.log("✅ Email enregistré sur Firebase !");
+    } catch (err) {
+      console.error("❌ Erreur lors de l’enregistrement :", err);
+    }
+
+    // Téléchargement du fichier
+    window.location.href = currentDownloadLink;
+    modal.style.display = "none";
+  });
+</script>
+
 </body>
 </html>
