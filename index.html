@@ -37,7 +37,6 @@
     .btn.primary{background:linear-gradient(90deg,var(--accent),#4f46e5);border:none;color:white}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
     .logo img {width: 100%;height: 100%;border-radius: 12px;object-fit: cover;}
-    /* === Animations des boutons === */
     .btn { position: relative; overflow: hidden; transition: all 0.3s ease; }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4); }
     .btn.primary::before { content: ""; position: absolute; top: 0; left: -75%; width: 50%; height: 100%; background: linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0)); transform: skewX(-25deg); transition: left 0.6s ease; }
@@ -46,7 +45,6 @@
     .btn:active { transform: scale(0.97); box-shadow: none; }
     footer{margin-top:16px;color:var(--muted);font-size:13px;text-align:center}
     @media (max-width:920px){.grid{grid-template-columns:1fr}.aside{order:2}.container{padding:12px}}
-    /* === Fenêtre modale === */
     .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 1000;}
     .modal-content {background: var(--card); color: var(--text); padding: 2rem; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.3); text-align: center;}
     .modal-content input {width: 100%; padding: 0.7rem; margin-top: 1rem; border-radius: 8px; border: 1px solid #ccc;}
@@ -106,132 +104,112 @@
     </div>
   </div>
 
-  <!-- 🚀 Firebase version avec animation de chargement -->
   <script type="module">
-  // Import Firebase SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-  // === CONFIGURATION FIREBASE ===
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPY88atDw9MhnU9Q2GsGlJ7S2w-GGLERw",
-    authDomain: "telechargement-nounotech.firebaseapp.com",
-    projectId: "telechargement-nounotech",
-    storageBucket: "telechargement-nounotech.firebasestorage.app",
-    messagingSenderId: "90467191007",
-    appId: "1:90467191007:web:af3e0d6cead6578df7016a"
-  };
+    // Config Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPY88atDw9MhnU9Q2GsGlJ7S2w-GGLERw",
+      authDomain: "telechargement-nounotech.firebaseapp.com",
+      projectId: "telechargement-nounotech",
+      storageBucket: "telechargement-nounotech.firebasestorage.app",
+      messagingSenderId: "90467191007",
+      appId: "1:90467191007:web:af3e0d6cead6578df7016a"
+    };
 
-  // Initialisation
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // === SCRIPT PRINCIPAL ===
-  const projects = [
-    {
-      title: "Bloc-notes Flutter",
-      tag: "mobile",
-      desc: "Code source complet de l'application Bloc-notes Flutter.",
-      thumbText: "BN",
-      zip: "https://github.com/ousseynousy/telechargement-codesource/raw/main/Bloc-Notes_Code_Source.zip",
-      github: "https://github.com/ousseynousy/telechargement-codesource"
-    },
-    {
-      title: "To-Do List Flutter",
-      tag: "mobile",
-      desc: "Code source complet de l’application To-Do List Flutter.",
-      thumbText: "TL",
-      zip: "https://github.com/ousseynousy/telechargement-codesource/raw/main/To-Do-List_Code_Source.zip",
-      github: "https://github.com/ousseynousy/telechargement-codesource"
-    }
-  ];
+    // Liste des projets
+    const projects = [
+      { title: "Bloc-notes Flutter", tag: "mobile", desc: "Code source complet de l'application Bloc-notes Flutter.", thumbText: "BN", zip: "https://github.com/ousseynousy/telechargement-codesource/raw/main/Bloc-Notes_Code_Source.zip", github: "https://github.com/ousseynousy/telechargement-codesource" },
+      { title: "To-Do List Flutter", tag: "mobile", desc: "Code source complet de l’application To-Do List Flutter.", thumbText: "TL", zip: "https://github.com/ousseynousy/telechargement-codesource/raw/main/To-Do-List_Code_Source.zip", github: "https://github.com/ousseynousy/telechargement-codesource" }
+    ];
 
-  const cards = document.getElementById("cards");
-  const search = document.getElementById("search");
-  const chips = document.querySelectorAll(".chip");
+    const cards = document.getElementById("cards");
+    const search = document.getElementById("search");
+    const chips = document.querySelectorAll(".chip");
 
-  let currentDownloadLink = "";
+    let currentDownloadLink = "";
 
-  function renderProjects(filter = "all", query = "") {
-    cards.innerHTML = projects
-      .filter(p =>
-        (filter === "all" || p.tag === filter) &&
-        p.title.toLowerCase().includes(query.toLowerCase())
-      )
-      .map(p => `
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div class="thumb">${p.thumbText}</div>
-            <div>
-              <div class="title">${p.title}</div>
-              <div class="desc">${p.desc}</div>
-              <div class="mini" style="margin-top:6px">Catégorie: ${p.tag}</div>
+    function renderProjects(filter = "all", query = "") {
+      cards.innerHTML = projects
+        .filter(p => (filter === "all" || p.tag === filter) && p.title.toLowerCase().includes(query.toLowerCase()))
+        .map(p => `
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="thumb">${p.thumbText}</div>
+              <div>
+                <div class="title">${p.title}</div>
+                <div class="desc">${p.desc}</div>
+                <div class="mini" style="margin-top:6px">Catégorie: ${p.tag}</div>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn primary download-btn" data-zip="${p.zip}">Télécharger</button>
+              <a class="btn ghost" href="${p.github}" target="_blank">GitHub</a>
             </div>
           </div>
-          <div class="actions">
-            <button class="btn primary download-btn" data-zip="${p.zip}">Télécharger</button>
-            <a class="btn ghost" href="${p.github}" target="_blank">GitHub</a>
-          </div>
-        </div>
-      `).join('');
+        `).join('');
 
-    // Ajoute le comportement des boutons
-    document.querySelectorAll(".download-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        currentDownloadLink = btn.getAttribute("data-zip");
-        modal.style.display = "flex";
+      document.querySelectorAll(".download-btn").forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.preventDefault();
+          currentDownloadLink = btn.getAttribute("data-zip");
+          modal.style.display = "flex";
+        });
       });
-    });
-  }
-
-  renderProjects();
-
-  chips.forEach(chip => {
-    chip.addEventListener("click", () => {
-      chips.forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      renderProjects(chip.dataset.filter, search.value);
-    });
-  });
-
-  search.addEventListener("input", () => {
-    const activeFilter = document.querySelector(".chip.active").dataset.filter;
-    renderProjects(activeFilter, search.value);
-  });
-
-  // === MODALE EMAIL ===
-  const modal = document.getElementById("emailModal");
-  const closeModal = document.getElementById("closeModal");
-  const confirmDownload = document.getElementById("confirmDownload");
-  const emailInput = document.getElementById("userEmail");
-
-  closeModal.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  confirmDownload.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    if (!email || !email.includes("@")) {
-      alert("Merci de saisir une adresse e-mail valide.");
-      return;
     }
 
-    try {
-      await addDoc(collection(db, "emails"), {
-        email: email,
-        timestamp: new Date()
+    renderProjects();
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        chips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        renderProjects(chip.dataset.filter, search.value);
       });
-      console.log("✅ Email enregistré sur Firebase !");
-    } catch (err) {
-      console.error("❌ Erreur lors de l’enregistrement :", err);
-    }
+    });
 
-    // Téléchargement du fichier
-    window.location.href = currentDownloadLink;
-    modal.style.display = "none";
-  });
-</script>
+    search.addEventListener("input", () => {
+      const activeFilter = document.querySelector(".chip.active").dataset.filter;
+      renderProjects(activeFilter, search.value);
+    });
 
+    // === MODALE EMAIL ===
+    const modal = document.getElementById("emailModal");
+    const closeModal = document.getElementById("closeModal");
+    const confirmDownload = document.getElementById("confirmDownload");
+    const emailInput = document.getElementById("userEmail");
+
+    closeModal.addEventListener("click", () => modal.style.display = "none");
+
+    confirmDownload.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      if (!email || !email.includes("@")) {
+        alert("Merci de saisir une adresse e-mail valide.");
+        return;
+      }
+
+      confirmDownload.disabled = true;
+      confirmDownload.textContent = "Enregistrement...";
+
+      try {
+        await addDoc(collection(db, "emails"), { email, timestamp: new Date() });
+        console.log("✅ Email enregistré sur Firebase !");
+        confirmDownload.textContent = "Téléchargement en cours...";
+        window.location.href = currentDownloadLink;
+        emailInput.value = "";
+        modal.style.display = "none";
+      } catch (err) {
+        console.error("❌ Erreur :", err);
+        alert("Une erreur est survenue, réessayez !");
+      } finally {
+        confirmDownload.disabled = false;
+        confirmDownload.textContent = "Continuer et télécharger";
+      }
+    });
+  </script>
 </body>
 </html>
