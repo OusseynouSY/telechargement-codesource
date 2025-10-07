@@ -197,13 +197,13 @@
 
       try {
         await addDoc(collection(db, "emails"), { email: email, timestamp: new Date() });
-        console.log("✅ Email enregistré sur Firebase !");
+        console.log("Email enregistré sur Firebase !");
         confirmDownload.textContent = "Téléchargement en cours...";
         window.location.href = currentDownloadLink;
         emailInput.value = "";
         modal.style.display = "none";
       } catch (err) {
-        console.error("❌ Erreur :", err);
+        console.error("Erreur :", err);
         alert("Une erreur est survenue, réessayez !");
       } finally {
         confirmDownload.disabled = false;
